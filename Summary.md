@@ -240,6 +240,42 @@
 - 复合类型
     - 指针 pointer
     - 数组 array
+        ```go
+            [32]byte     //长度为32的数组，每个元素占一个字节
+            [2*N] struct {x,y int32}  //复杂类型数组
+            [1000]*float64      //指针数组
+            [2][3] int         //二维数组
+            [2][3][4]float64      //等同于 [2]([3]([4]float64)) 
+            
+            arrLen := len(arr)    //数组长度len是数组内置常量 
+            
+        ```
+        数组访问:
+        ```go
+            for i:=0; i<len(arr) ;i++{
+                fmt.Println(i,arr[i])
+            }
+
+            for i,v := range arr {
+                fmt.Println(i,v);     //下标 , 值
+            }
+        ```
+
+        值类型
+        ```go
+            func modifyArr(arr [10]int){
+                arr[0] = 11
+                fmt.Println('modify arr',arr)
+            }
+
+            func main(){
+                arr := [5]{1,2,3,4,5} 
+                modify(arr)        //[11,2,3,4,5]
+                fmt.Println('main ',arr);   //[1,2,3,4,5]
+            }
+            //在go中，数组是一种值类型，所有的值类型变量在赋值和作为参数传递时将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时将发生数据复制，因此在函数体中无法修改传入的数组内容,函数体操作的是该参数的一个副本。
+        ```
+        
     - 切片 slice
     - 字典 map
     - 通道 chan
