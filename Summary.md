@@ -1,13 +1,11 @@
 # golang note
 
-## 2019-06-19
-
-### 语言特性
+## 语言特性
     - 自动垃圾回收
     - 并发编程
     - 多返回值
 
-### 变量
+## 变量
     
 ```go
         //定义
@@ -46,7 +44,7 @@
  
 ```
 
-### 常量
+## 常量
 - 字面常量
     ```go
             -12
@@ -107,7 +105,7 @@
             )
         ```
 
-### 枚举
+## 枚举
 - 定义
     - 通过const () 定义一组常量来定义枚举值
         ```go
@@ -125,7 +123,7 @@
             //同其他符号（symbol）一样 ，大写字母开头的常量在包外可见
 
         ```
-### 类型
+## 类型
 - 基础类型
     - 布尔类型：bool
         - 可赋值为预定义的true和false
@@ -277,8 +275,209 @@
         ```
         
     - 切片 slice
+        - 数组切片
+            - 基于数组
+                ```go
+                 func main(){
+                     var arr [5]int = [5]int{1,2,3,4,5}
+                     var mySlice  []int =  arr[:3]
+                     
+                     for i,v := range arr{
+                         fmt.Println(i,v)  //1,2,3,4,5
+                     }
+
+                     for i,v := range mySlice{
+                         fmt.Println(i,v)   //1,2,3
+                     }
+                 }
+
+                 // go支持以arr[start:end] 形式创建数组切片
+                 arr[:]     //基于所有数组元素创建切片
+                 arr[2:]    //基于第2个数组元素开始的所有元素创建切片 index 2 ~ len(arr)-1
+                 arr[:5]    //基于前5个元素创建切片 index 0~4
+                
+                 // index ~ [start,end)
+                ```
+
+            - 直接创建 **make**
+                ```go
+                    //创建一个初始元素个数为5的切片，元素初始值为0
+                    mySlice := make([]int,5)
+                    
+                    //创建一个初始元素个数为5的切片，元素初始值为0,并预留10个元素的存储空间
+                    mySlice :=make([]int,5,10)
+
+                    //直接创建并初始化包含3个元素的数组切片
+                    mySlice :=[]int{1,2,3}
+
+                ```
+            - 动态增减元素
+
+                数组切片支持内置的**cap**和**len**函数，
+                **cap**返回的是数组切片分配的空间大小
+                ```go
+                    func main(){
+                        mySlice :=  make([]int,5,20)
+                        fmt.Println(len(mySlice),cap(mySlice))  //5,20
+                    }
+                ```
+
+                新增元素： **append**
+                ```go
+                    //尾部添加新元素
+                    mySlice = append(mySlice,1,2,3)
+
+                    //数组切片追加
+                    aSlice  := []int{7,8,9}
+                    mySlice  = append(mySlice,aSlice...) //省略号，打散后传入，等同于： mySlice = append(mySlice,7,8,9)
+                    
+                ```
+
+                - `注：`数组切片会自动处理存储空间不足的问题，如果追加的内容超过当前已经分配的存储空间大小（**cap**返回的信息），数组切片会自动分配一块足够大的内存
+            
+            - 基于数组切片创建数组切片
+                ```go 
+                    oldSlice := []int{1,2,3}
+                    newSlice := oldSlice[:2]
+                ``` 
+                `注:` **newSlice选择oldSlice元素的范围可超过其所包含的元素个数，只要范围不超过oldSlice的存储能力范围（cap）, newSlice超过oldSlice元素的部分会自动填上0**
+            
+            - 内容复制
+
+                **copy(paramA,paramB)** paramA 按其中较小的切片的元素个数进行复制替换
+                ```go
+                    sliceA := []int{1,2,3}
+                    sliceB := []int{4,5,6,7}
+
+                    copy(sliceB,sliceA);  
+                    //sliceB[1,2,3,7]  sliceA[1,2,3]
+
+                    //copy(sliceA,sliceB)
+                    //sliceA[4,5,6]     sliceB[4,5,6,7]
+                ```
+
+
     - 字典 map
+        ```go
+            type PersonInfo struct {
+                ID string
+                Name string
+                Address string
+            }
+
+            func main(){
+                var personDB map[string] PersonInfo
+                personDB = make(map[string] PersonInfo)
+
+                //数据插入
+                personDB["123456"] = PersonInfo{"123456","Kobe","room 12 ..."}
+                personDB["2"] = PersonInfo{"2","Jordon","room 34"}
+
+                //数据查找
+
+                person,ok := personDB["123456"];
+                //ok 返回的bool类型，如果找到对应数据则为true
+                if ok {
+                    fmt.Println("found person by ID = 123456");
+                }else{
+                    fmt.Println("did not found");
+                }
+            }
+
+        ```
+
+
+
     - 通道 chan
+
     - 结构体 struct
+
     - 接口 interface
+
+
+
+
+## 流程控制
+- 条件语句 if、else 、else-if
+    
+    ` * 注： 在有返回值的函数中，不允许将“最终”的return语句包含在if...else...结构中`
+
+- 选择语句 switch case 、select
+
+
+- 循环语句 for 、range
+  ```go
+    //简化无限循环
+    
+    sum := 0
+    for{
+        sum++
+        if sum>100{
+            break
+        }
+    }
+
+    //条件表达式支持多重赋值
+
+     a := []int{1,2,3,4,5}
+     for i,j := 0,len(a); i<j; i,j := i+1,j-1{
+         a[i],a[j] = a[j],a[i]
+     }
+
+  ```
+  `*注： 循环同样支持continue和break来控制循环：`
+    ```go
+    for i :=0 ; i< 5 ;i++{
+        for j:=0;j<10;j++{
+            if(j>5){
+                break JLoop
+            }
+            fmt.Println(i,j);
+        }
+    }
+    JLoop:
+    //...
+    //本例中，break终止的是JLoop标签处的外层循环
+    ```
+
+- 跳转语句 goto
+
+
+## 函数
+- 定义
+    ```go
+        func myFunc(a,b int)(res int,err error){
+            if a<0 || b<0{
+                err = error.New("——————————")
+            }
+            return a+b,nil    //支持多重返回值
+        }
+    ```
+- 调用
+
+    导入函数所在的包就可以直接调用
+
+- 不定参数类型
+    ```go
+        func myFunc(args ...int){
+            for i,v := range args{
+                fmt.Println(i,v)
+            }
+        }
+
+    ```
+- 不定参数
+    ```go
+        func myFunc(args ...interface{}){
+            for i,arg := range args{
+                fmt.Println(i,"arg type",arg.(type));
+            }
+        }
+    ```
+- 多返回值
+        
+
+
+
+
     
