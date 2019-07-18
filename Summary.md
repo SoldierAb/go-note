@@ -465,8 +465,28 @@
             }
         }
 
+        //调用
+        myFunc(1,2,3,4)
+        myFunc(1,2)
+
     ```
-- 不定参数
+- 不定参数的传递
+```go
+    func myFunc2(args ...int){
+
+    }
+    func myFunc(args ...int){
+        //原样传递
+        myFunc2(args...)
+        //传递片段
+        myFunc2(args[2:]...)
+    }
+```    
+
+- 任意类型的不定参数
+    
+    希望传递任意类型，可指定类型为interface{}
+
     ```go
         func myFunc(args ...interface{}){
             for i,arg := range args{
@@ -474,6 +494,7 @@
             }
         }
     ```
+    
 - 多返回值
         
 
