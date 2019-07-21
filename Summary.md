@@ -1,13 +1,18 @@
 # golang note
 
-## 语言特性
-    - 自动垃圾回收
-    - 并发编程
-    - 多返回值
+## 基础语法
 
-## 变量
+### 语言特性
+
+    + 自动垃圾回收
+    + 并发编程
+    + 多返回值
+
+### 变量
+
     
-```go
+
+``` go
         //定义
         var v1 int
         var ar [10] int   //数组
@@ -44,8 +49,10 @@
  
 ```
 
-## 常量
-- 字面常量
+### 常量
+
+* 字面常量
+
     ```go
             -12
             3.1415994329423424   //浮点类型
@@ -53,8 +60,10 @@
             true                 //布尔类型
             "foo"                //字符串类型
     ```
-- 常量定义
-    - 通过 const 关键字
+
+* 常量定义
+    + 通过 const 关键字
+
         ```go
             const Pi  float64 = 3.1435235235345235254255523
             const zero = 0.0        //无类型浮点常量
@@ -68,7 +77,9 @@
             const a,b,c = 3,4,"foo"    //a=3 b=4 c="foo" 无类型整型和字符串常量
 
         ```
-    - 预定义常量
+
+    + 预定义常量
+
         true,false,iota
         iota 可认为是一个可被编辑器修改的常量，在每一个const出现时被重置为0,在下一个const出现之前，每出现一次iota，其代表的数字就会自增1
         ```go
@@ -100,14 +111,16 @@
 
             const (
                 a = 1<<iota
-                b,
+                b, 
                 c
             )
         ```
 
-## 枚举
-- 定义
-    - 通过const () 定义一组常量来定义枚举值
+### 枚举
+
+* 定义
+    + 通过const () 定义一组常量来定义枚举值
+
         ```go
             const (
                 Sunday = iota
@@ -123,10 +136,13 @@
             //同其他符号（symbol）一样 ，大写字母开头的常量在包外可见
 
         ```
-## 类型
-- 基础类型
-    - 布尔类型：bool
+
+### 类型
+
+* 基础类型
+    + 布尔类型：bool
         - 可赋值为预定义的true和false
+
             ```go
                 var v bool
                 v = true
@@ -136,10 +152,16 @@
                 b = 1       //编译报错
                 b = bool(1)   //编译报错
             ```
-    - 整型： int8,byte,int16,uint16,int32,uint32,int64,uint64,unitptr 等
+
+    + 整型： int8, byte, int16, uint16, int32, uint32, int64, uint64, unitptr 等
+
         
-        ![整型数据表](./assets/img/int-table.jpg)
+        
+
+![整型数据表](./assets/img/int-table.jpg)
+
         1.  类型表示：
+
             需要注意的是int和int32为不同类型，编译器不会自动转换，要转换需使用强制类型转换的方式
             ```go
                 var val1 int32
@@ -147,18 +169,18 @@
                 val1 = val2    //编译出错
                 val1 = int32(val2)   //编译通过
             ```
-            `强制转需要注意的是精度丢失问题`
+ `强制转需要注意的是精度丢失问题` 
 
         2. 数值运算: + - * / % 
         3. 比较运算： < ,<= , == ,>=,>,!= 
 
-            `两个不同类型的值是不能直接比较，但是各种类型的整型可以与字面常量（literal）进行比较`
+ `两个不同类型的值是不能直接比较，但是各种类型的整型可以与字面常量（literal）进行比较` 
             ```go
                     var i int32
                     var j int64
-                    i,j = 1,2
+                    i, j = 1, 2
                     if i==j {        //编译出错
-                        fmt.Println("----");
+                        fmt. Println("----"); 
                     }
 
                     if i==1 || j ==2 {  //编译通过
@@ -167,15 +189,19 @@
             ```
 
         4. 位运算
-            ![位运算](./assets/img/wys.jpg)
 
+            
 
+![位运算](./assets/img/wys.jpg)
 
-    - 浮点型： 
+    + 浮点型： 
+
         
+
         - float32（等价于 C语言的 float型）,
         - float64 （等价于 C 语言的double型），转换同整型一样需要使用强制类型转换 
         - 比较
+
             因为浮点数不是一种精确的表达式，不能直接像整型一样使用 == 来判断是否相等，推荐以下方案：
             ```go
                 import "math"
@@ -187,8 +213,8 @@
 
             ```
 
+    + 复数类型：complex64, complex128
 
-    - 复数类型：complex64,complex128
         ```go
             //定义：实部 + 虚部
             var val1 complex64     //由2个float32构成的复数类型
@@ -198,8 +224,8 @@
 
         ```
 
+    + 字符串： string
 
-    - 字符串： string
         ```go
             var str string
             str = "hello world"
@@ -207,9 +233,13 @@
             //注： 字符串的内容不能在初始化后被修改 ，如
             str[0] = "x"     //编译出错
         ```
+
         - 字符串操作：
 
-            ![字符串操作](./assets/img/string.jpg)
+            
+
+![字符串操作](./assets/img/string.jpg)
+
         - 遍历：
 
             ```go
@@ -228,19 +258,21 @@
 
             ```
 
-
-    - 字符类型：
+    + 字符类型：
         - byte (**实际是uint8的别名**) 代表UTF-8字符串单个字节的值
         - rune 代表单个Unicode字符
 
-    - 错误类型： error
+    + 错误类型： error
+
     
-- 复合类型
-    - 指针 pointer
-    - 数组 array
+
+* 复合类型
+    + 指针 pointer
+    + 数组 array
+
         ```go
             [32]byte     //长度为32的数组，每个元素占一个字节
-            [2*N] struct {x,y int32}  //复杂类型数组
+            [2*N] struct {x, y int32}  //复杂类型数组
             [1000]*float64      //指针数组
             [2][3] int         //二维数组
             [2][3][4]float64      //等同于 [2]([3]([4]float64)) 
@@ -250,12 +282,12 @@
         ```
         数组访问:
         ```go
-            for i:=0; i<len(arr) ;i++{
-                fmt.Println(i,arr[i])
+            for i:=0; i<len(arr) ; i++{
+                fmt. Println(i, arr[i])
             }
 
-            for i,v := range arr {
-                fmt.Println(i,v);     //下标 , 值
+            for i, v := range arr {
+                fmt. Println(i, v); //下标 , 值
             }
         ```
 
@@ -267,16 +299,18 @@
             }
 
             func main(){
-                arr := [5]{1,2,3,4,5} 
-                modify(arr)        //[11,2,3,4,5]
-                fmt.Println('main ',arr);   //[1,2,3,4,5]
+                arr := [5]{1, 2, 3, 4, 5} 
+                modify(arr)        //[11, 2, 3, 4, 5]
+                fmt. Println('main ', arr); //[1, 2, 3, 4, 5]
             }
-            //在go中，数组是一种值类型，所有的值类型变量在赋值和作为参数传递时将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时将发生数据复制，因此在函数体中无法修改传入的数组内容,函数体操作的是该参数的一个副本。
+            //在go中，数组是一种值类型，所有的值类型变量在赋值和作为参数传递时将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时将发生数据复制，因此在函数体中无法修改传入的数组内容, 函数体操作的是该参数的一个副本。
         ```
-        
-    - 切片 slice
+$mdFormatter$36$mdFormatter$
+
+    + 切片 slice
         - 数组切片
             - 基于数组
+
                 ```go
                  func main(){
                      var arr [5]int = [5]int{1,2,3,4,5}
@@ -300,6 +334,7 @@
                 ```
 
             - 直接创建 **make**
+
                 ```go
                     //创建一个初始元素个数为5的切片，元素初始值为0
                     mySlice := make([]int,5)
@@ -311,14 +346,15 @@
                     mySlice :=[]int{1,2,3}
 
                 ```
+
             - 动态增减元素
 
                 数组切片支持内置的**cap**和**len**函数，
                 **cap**返回的是数组切片分配的空间大小
                 ```go
                     func main(){
-                        mySlice :=  make([]int,5,20)
-                        fmt.Println(len(mySlice),cap(mySlice))  //5,20
+                        mySlice :=  make([]int, 5, 20)
+                        fmt. Println(len(mySlice), cap(mySlice))  //5, 20
                     }
                 ```
 
@@ -328,20 +364,24 @@
                     mySlice = append(mySlice,1,2,3)
 
                     //数组切片追加
-                    aSlice  := []int{7,8,9}
-                    mySlice  = append(mySlice,aSlice...) //省略号，打散后传入，等同于： mySlice = append(mySlice,7,8,9)
+                    aSlice  := []int{7, 8, 9}
+                    mySlice  = append(mySlice, aSlice...) //省略号，打散后传入，等同于： mySlice = append(mySlice, 7, 8, 9)
                     
                 ```
 
-                - `注：`数组切片会自动处理存储空间不足的问题，如果追加的内容超过当前已经分配的存储空间大小（**cap**返回的信息），数组切片会自动分配一块足够大的内存
+                - `注：` 数组切片会自动处理存储空间不足的问题，如果追加的内容超过当前已经分配的存储空间大小（**cap**返回的信息），数组切片会自动分配一块足够大的内存
+
             
+
             - 基于数组切片创建数组切片
+
                 ```go 
-                    oldSlice := []int{1,2,3}
+                    oldSlice := []int{1, 2, 3}
                     newSlice := oldSlice[:2]
                 ``` 
-                `注:` **newSlice选择oldSlice元素的范围可超过其所包含的元素个数，只要范围不超过oldSlice的存储能力范围（cap）, newSlice超过oldSlice元素的部分会自动填上0**
+ `注:` **newSlice选择oldSlice元素的范围可超过其所包含的元素个数，只要范围不超过oldSlice的存储能力范围（cap）, newSlice超过oldSlice元素的部分会自动填上0**
             
+
             - 内容复制
 
                 **copy(paramA,paramB)** paramA 按其中较小的切片的元素个数进行复制替换
@@ -352,12 +392,12 @@
                     copy(sliceB,sliceA);  
                     //sliceB[1,2,3,7]  sliceA[1,2,3]
 
-                    //copy(sliceA,sliceB)
-                    //sliceA[4,5,6]     sliceB[4,5,6,7]
+                    //copy(sliceA, sliceB)
+                    //sliceA[4, 5, 6]     sliceB[4, 5, 6, 7]
                 ```
 
+    + 字典 map
 
-    - 字典 map
         ```go
             type PersonInfo struct {
                 ID string
@@ -390,26 +430,23 @@
 
         ```
 
+    + 通道 chan
 
+    + 结构体 struct
 
-    - 通道 chan
+    + 接口 interface
 
-    - 结构体 struct
+### 流程控制
 
-    - 接口 interface
+* 条件语句 if、else 、else-if
 
-
-
-
-## 流程控制
-- 条件语句 if、else 、else-if
     
-    ` * 注： 在有返回值的函数中，不允许将“最终”的return语句包含在if...else...结构中`
+ ` * 注： 在有返回值的函数中，不允许将“最终”的return语句包含在if...else...结构中` 
 
-- 选择语句 switch case 、select
+* 选择语句 switch case 、select
 
+* 循环语句 for 、range
 
-- 循环语句 for 、range
   ```go
     //简化无限循环
     
@@ -429,7 +466,7 @@
      }
 
   ```
-  `*注： 循环同样支持continue和break来控制循环：`
+ `*注： 循环同样支持continue和break来控制循环：` 
     ```go
     for i :=0 ; i< 5 ;i++{
         for j:=0;j<10;j++{
@@ -444,11 +481,12 @@
     //本例中，break终止的是JLoop标签处的外层循环
     ```
 
-- 跳转语句 goto
+* 跳转语句 goto
 
+### 函数
 
-## 函数
-- 定义
+* 定义
+
     ```go
         func myFunc(a,b int)(res int,err error){
             if a<0 || b<0{
@@ -457,13 +495,14 @@
             return a+b,nil    //支持多重返回值
         }
     ```
-   `注： 小写字母开头的函数只在本包内可见，大写字母开头的函数才能被其他包使用，这个规则也适用于类型和变量的可见性`
+ `注： 小写字母开头的函数只在本包内可见，大写字母开头的函数才能被其他包使用，这个规则也适用于类型和变量的可见性` 
 
-- 调用
+* 调用
 
     导入函数所在的包就可以直接调用
 
-- 不定参数类型（不定参数数量）
+* 不定参数类型（不定参数数量）
+
     ```go
         func myFunc(args ...int){
             for i,v := range args{
@@ -476,7 +515,9 @@
         myFunc(1,2)
 
     ```
-- 不定参数的传递
+
+* 不定参数的传递
+
 ```go
     func myFunc2(args ...int){
 
@@ -489,22 +530,26 @@
     }
 ```    
 
-- 任意类型的不定参数
+* 任意类型的不定参数
+
     
     希望传递任意类型，可指定类型为interface{}
 
     ```go
         func myFunc(args ...interface{}){
-            for i,arg := range args{
-                fmt.Println(i,"arg type",arg.(type));
+            for i, arg := range args{
+                fmt. Println(i, "arg type", arg.(type)); 
             }
         }
     ```
     
-- 多返回值
+
+* 多返回值
+
         
 
-- 匿名函数与闭包
+* 匿名函数与闭包
+
     ```go
         i:=11
         fn:=func ()(func ()){
@@ -516,10 +561,92 @@
 
     ```
 
+### 错误处理
 
-## 错误处理
+---
+
+## OOP
+
+###  为类型添加新方法
+
+	```go 
+		type Integer int
+
+        func (a Integer) Less(b Integer) bool{
+	        return a<b
+        }
+
+        func (a *Integer) Add(b Integer){
+	        *a += b
+        }
+
+        func main(){
+	        var a Integer = 2
+	        if a.Less(5){
+		        fmt.Println(a,"less 5")
+	        }
+
+	        a.Add(9)
+	        fmt.Println("a add 9 equal : ",a)
+
+	        var arr = [3]int{1,2,3}
+	        var b = arr
+
+	        b[1]++
+
+	        fmt.Println(arr,b)
+
+	        var c=&arr
+	        c[1]++
+			fmt.Println(arr,*c)
+		}
+	```
+### 初始化、创建函数（“构造函数”）
+
+	```go
+		//初始化
+	type Rect struct{
+		x,y float64
+		width,height float64
+	}
+
+	rect1 := new(Rect)
+	rect2 := &Rect{0,0,2,4}
+	rect3 := &Rect{width:200,height:400}
+	rect4 := &Rect{}
+
+	//全局创建函数
+	func NewRect(x,y,width,height float64) *Rect{
+		return &Rect{x,y,width,height}
+	}
+
+	```
+
+### 匿名组合
+	```go
+		type Base struct {
+			Name string
+		}
+
+		func(b *Base) foo(){
+			...
+		}
+
+		func(c *Base) bar(){
+			...
+		}
+	```
+
+
+### 可见性
+
+![可见性](./assets/img/oop-see.png)
+
+### 接口
+
 
 
 
 
     
+
