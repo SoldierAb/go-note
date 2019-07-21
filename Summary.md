@@ -374,7 +374,6 @@
                 personDB["2"] = PersonInfo{"2","Jordon","room 34"}
 
                 //数据查找
-
                 person,ok := personDB["123456"];
                 //ok 返回的bool类型，如果找到对应数据则为true
                 if ok {
@@ -382,6 +381,11 @@
                 }else{
                     fmt.Println("did not found");
                 }
+
+                //删除
+                delete(PersonDB,"2")
+                person2,founded := PersonDB["2"];
+                fmt.Println(person2,founded);   //{0  } false
             }
 
         ```
@@ -453,11 +457,13 @@
             return a+b,nil    //支持多重返回值
         }
     ```
+   `注： 小写字母开头的函数只在本包内可见，大写字母开头的函数才能被其他包使用，这个规则也适用于类型和变量的可见性`
+
 - 调用
 
     导入函数所在的包就可以直接调用
 
-- 不定参数类型
+- 不定参数类型（不定参数数量）
     ```go
         func myFunc(args ...int){
             for i,v := range args{
@@ -497,6 +503,21 @@
     
 - 多返回值
         
+
+- 匿名函数与闭包
+    ```go
+        i:=11
+        fn:=func ()(func ()){
+            var a int =10
+            return func(){
+                fmt.Println(i,a)
+            } 
+        }
+
+    ```
+
+
+## 错误处理
 
 
 
