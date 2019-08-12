@@ -670,8 +670,110 @@ $mdFormatter$36$mdFormatter$
 - Any 类型
   
 
+- defer
+    - go的延迟函数
+    - 函数不会立即被调用
+    ```go
+
+		import (
+			"fmt"
+			"os"
+		)
+
+		func ReadFile(fileName string){
+			f,err := os.Open(fileName)
+
+			if err !=nil{
+				fmt.Println("read file failed:   ",fileName)
+				return
+			}
+
+			defer f.Close()
+
+			var content [1024]byte
+			f.Read(content[:])
+			fmt.Println("%s",content)
+		}
+
+		func main(){
+			ReadFile("test.json")
+		}
+
+    ```
+				
+    - 函数值和函数参数被求值，但函数不会立即调用:
+		```go
+
+		import (
+			"fmt"
+			"log"
+			"time"
+		)
+
+		func Trace(funcName string) func(){
+			start := time.Now()
+			fmt.Printf("func s% enter \n",funcName)
+			return func() {
+				log.Printf("func s% exit s% ",funcName,time.Since(start))
+			}
+		}
 
 
+		func foo(){
+			defer Trace("foo()")()
+			time.Sleep(2*time.Second)
+		}
 
+		func main(){
+			foo()
+			foo()
+		}
+
+		```
+	- 杂项
+		- 如果存在多个defer ,则defer的执行顺序与出现顺序相反
+ 
+## go sync 包
+- Mutex (互斥锁)
+	- Lock() 加锁 Unlock()解锁
+	- 在一个goroutine获的Mutex之后，其他goroutine只能等待这个goroutine 释放这个Mutex
+
+	- 使用Lock()之后，不能再继续对其加锁，直到UnlocK()之后才能继续加锁
+
+	- 在Lock之前使用Unlock会导致panic异常
+
+	- 已经锁定的Mutex并不与特定的goroutine相关联，即可以用一个goroutine对其加锁，用另外一个goroutine对其解锁
+
+	- 在同一个goroutine 中的Mutex 解锁之前加锁，会导致死锁
+
+	- 适用与读写不确定，并且只有一个读或者写的场景
+
+	
+- RWMutex (读写锁 - 基于 Mutex实现)
+		
+	- 单写多读锁，该锁可以加多个读锁单个写锁
+		
+	- 读锁占用的情况下不会阻止写和读，多个goroutine 可以同时获取读锁
+		
+	- 写锁会阻止其他goroutine进入（不论是读还是写），整个锁由该goroutine独占
+	- 适用于读多写少的场景
+	
+
+- Lock 、 Unlock(加写锁、解写锁)
+
+	- 如果在加写锁之前已经有其他的写锁或者读锁，则Lock()会阻塞直到该锁可用，为确保该锁可用，已经阻塞的Lock()调用会从获得的锁中排除新的读取器，即 **写锁权限高于读锁，有写锁时先进行写锁定**
+
+	- 在Lock之前使用Unlock会导致panic异常
+	
+	- RLock 、RUnlock(加读锁、解读锁)
+	- RLock加读锁时，如果存在写锁则无法加读锁；当只有读锁或者没有锁时，可以加多个读锁
+	- RUnlock 解读锁，RUnlock撤销RLock调用，对于其他同时存在的读锁则没有效果 
+	- 在没有读锁、RUnlock的个数多于RLock的个数的情况下调用RUnlock会导致panic错误
+
+	
+		
+
+
+		
     
 
