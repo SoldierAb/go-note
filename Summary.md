@@ -282,3 +282,38 @@
     - 结构体 struct
     - 接口 interface
     
+
+
+
+## 08.07 - 并发编程
+- 协程（goroutine） `go`关键字
+- 并发通信：
+    - 锁（繁琐、臃肿）
+
+- channal 
+    - 基本语法：
+        - 声明 `chan`关键字添加
+        - 定义 make  ,  缓冲机制
+    
+    - select
+        - 处理异步IO
+        - case 语句必须是IO操作（读取、写入）
+    
+    - 超时机制
+        - 利用select实现
+
+    - channel 传递
+    - 单向channel  , 转换
+    - 关闭
+        - close
+        ```go
+            x,ok := <- ch   //于map按键获取类似，ok为bool
+        ```    
+
+
+##  0808
+
+- IPC简单示例 demo编写学习【server端和client端】
+    
+    包含知识点：
+    - 用channel作为模块之间的通信方式
